@@ -27,9 +27,11 @@ func start(*cli.Context) error {
 		return err
 	}
 	fileScanner := bufio.NewScanner(file)
+	i := 1
 	for fileScanner.Scan() {
 		line := strings.TrimSpace(fileScanner.Text())
 		newline := strings.Replace(line, "xml", "qcow2", -1)
+		log.Println()
 		b, err1 := PathExists(newline)
 		if b && err1 == nil {
 			VmT := strings.Split(newline, "/")
@@ -80,6 +82,7 @@ func start(*cli.Context) error {
 			}
 			log.Println(strings.Trim(string(status), "\n"))
 			time.Sleep(1 * time.Second)
+			i++
 			//virsh list
 			cmd5 = exec.Command("virsh", "list")
 			if tlist, err = cmd5.Output(); err != nil {
@@ -96,7 +99,17 @@ func start(*cli.Context) error {
 		log.Println(err)
 		return err
 	}
+
 	defer file.Close()
+	log.Println("VM Count:", i)
+	var cmd6 *exec.Cmd
+	var plist []byte
+	cmd6 = exec.Command("virsh", "list")
+	if plist, err = cmd6.Output(); err != nil {
+		log.Println(err)
+		return err
+	}
+	log.Println(strings.Trim(string(plist), "\n"))
 	return nil
 }
 
