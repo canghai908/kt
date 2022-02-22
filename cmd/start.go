@@ -31,7 +31,6 @@ func start(*cli.Context) error {
 	for fileScanner.Scan() {
 		line := strings.TrimSpace(fileScanner.Text())
 		newline := strings.Replace(line, "xml", "qcow2", -1)
-		log.Println()
 		b, err1 := PathExists(newline)
 		if b && err1 == nil {
 			VmT := strings.Split(newline, "/")
