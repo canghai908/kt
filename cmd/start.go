@@ -28,7 +28,6 @@ func start(*cli.Context) error {
 	}
 	fileScanner := bufio.NewScanner(file)
 	for fileScanner.Scan() {
-		log.Println(fileScanner.Text())
 		line := strings.TrimSpace(fileScanner.Text())
 		newline := strings.Replace(line, "xml", "qcow2", -1)
 		b, err1 := PathExists(newline)
@@ -44,10 +43,9 @@ func start(*cli.Context) error {
 				log.Println(err)
 				continue
 			}
-			log.Println(strings.Trim(string(newstatus), "\n"))
 			if strings.Contains(strings.Trim(string(newstatus), "\n"), VmID[0]) {
 				log.Println("VM", VmID[0], "is running")
-				break
+				continue
 			}
 			//检查虚拟机磁盘文件大小
 			cmd1 = exec.Command("qemu-img", "info", newline)
@@ -58,7 +56,7 @@ func start(*cli.Context) error {
 			disksize := strings.Split(info[2], ":")
 			if !strings.Contains(disksize[1], "50G") {
 				log.Println("VM磁盘文件大小错误", info[2])
-				break
+				continue
 			}
 
 			log.Println("VM ID", VmID[0])
