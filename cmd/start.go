@@ -59,7 +59,6 @@ func start(*cli.Context) error {
 				log.Println("VM磁盘文件大小错误", info[2])
 				continue
 			}
-
 			log.Println("VM ID", VmID[0])
 			log.Println("VM Disk file", newline)
 			log.Println("VM Disk Size", strings.Trim(disksize[1], " "))
@@ -79,6 +78,7 @@ func start(*cli.Context) error {
 				log.Println(err)
 				continue
 			}
+			i++
 			log.Println(strings.Trim(string(status), "\n"))
 			time.Sleep(1 * time.Second)
 			//virsh list

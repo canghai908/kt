@@ -18,8 +18,8 @@ var (
 )
 
 func shutdown(*cli.Context) error {
-	var cmd, cmd2 *exec.Cmd
-	var resize, size []byte
+	var cmd, cmd2, cmd3 *exec.Cmd
+	var resize, size, status []byte
 	var err error
 	//查看vm列表
 	cmd = exec.Command("virsh", "list")
@@ -46,7 +46,7 @@ func shutdown(*cli.Context) error {
 	for i := 2; i < len(list); {
 		VmName := strings.Split(list[i], " ")
 		log.Println("--------------------------------")
-		log.Println("Action ", p, ",Shutdown VM ", strings.Trim(VmName[3], " "))
+		log.Println("Action", p, ",Shutdown VM ", strings.Trim(VmName[3], " "))
 		cmd2 = exec.Command("virsh", "shutdown", strings.Trim(VmName[3], " "))
 		if size, err = cmd2.Output(); err != nil {
 			log.Println(err)
@@ -57,5 +57,11 @@ func shutdown(*cli.Context) error {
 		p++
 		i++
 	}
+	cmd3 = exec.Command("virsh", "list")
+	if status, err = cmd3.Output(); err != nil {
+		log.Println(err)
+		return err
+	}
+	log.Println(strings.Trim(string(status), "\n"))
 	return nil
 }
