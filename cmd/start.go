@@ -27,7 +27,7 @@ func start(*cli.Context) error {
 		return err
 	}
 	fileScanner := bufio.NewScanner(file)
-	i := 1
+	i := 0
 	for fileScanner.Scan() {
 		line := strings.TrimSpace(fileScanner.Text())
 		newline := strings.Replace(line, "xml", "qcow2", -1)
@@ -82,7 +82,6 @@ func start(*cli.Context) error {
 			}
 			log.Println(strings.Trim(string(status), "\n"))
 			time.Sleep(1 * time.Second)
-			i++
 			//virsh list
 			cmd5 = exec.Command("virsh", "list")
 			if tlist, err = cmd5.Output(); err != nil {
@@ -109,7 +108,7 @@ func start(*cli.Context) error {
 		log.Println(err)
 		return err
 	}
-	log.Println(strings.Trim(string(plist), "\n"))
+	fmt.Println(strings.Trim(string(plist), "\n"))
 	return nil
 }
 
